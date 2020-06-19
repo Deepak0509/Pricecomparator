@@ -12,9 +12,9 @@ Label1 = Label(root, text="Search for any product:")
 
 SearchBar = Entry(root, width=60)
 
-Label1.grid(column=1, row=1)
+Label1.grid(column=1, row=1, columnspan=2)
 Label1.config(font=("san-serif", 20))
-SearchBar.grid(column=1, row=2)
+SearchBar.grid(column=1, row=2, columnspan=2)
 
 def Run():
     SearchItem = SearchBar.get()
@@ -32,7 +32,7 @@ def Run():
     amazonName = ProductAmazon.find('span').get_text()
     amazonPrice = soupAmazon.find('span', class_='a-offscreen')
 
-    # Flipcart Search
+    # Flipkart Search
     searchItem = SearchBar.get()
     url_flipkart = "https://www.flipkart.com/search?q="+SearchItem
     respFlipkart = requests.get(url_flipkart, headers=headers)
@@ -41,9 +41,9 @@ def Run():
     link_flipkart = "https://www.flipkart.com"+soupFlipkart.find('a', target='_blank').get('href')
     response = requests.get(link_flipkart, headers=headers)
     if response.status_code == 200:
-        linkSoup = BeautifulSoup(response.content, "html.parser")
-    Name = linkSoup.find('h1').get_text()
-    Price = linkSoup.find('div', class_='_1vC4OE _3qQ9m1').get_text()
+       linkSoup = BeautifulSoup(response.content, "html.parser")
+    FlipkartName = linkSoup.find('h1').get_text()
+    FlipkartPrice = linkSoup.find('div', class_='_1vC4OE _3qQ9m1').get_text()
 
     # Amazon Display
     AmazonLabel = Label(root, text="Product on Amazon", justify='center')
@@ -56,28 +56,35 @@ def Run():
         webbrowser.open(link_amazon)
     AmazonLinkButton = Button(root, text="View product", command=OpenAmazonLink, bg='blue', fg='white')
     AmazonLinkButton.grid(column=1, row=7)
+    def OpenMoreSuggestions_Amazon():
+        webbrowser.open(url_amazon)
+    AmazonMoreSuggestionsButton = Button(root, text="Not this? Click here for more suggestions", command=OpenMoreSuggestions_Amazon, bg='grey', fg='white')
+    AmazonMoreSuggestionsButton.grid(column=1, row=8)
 
     # Flipkart Display
     FlipkartLabel = Label(root, text="Product on Flipkart", justify='center')
-    FlipkartNameLabel = Label(root, text=Name, wraplength=400, justify='center')
-    FlipcartPriceLabel = Label(root, text="Price : "+Price, justify='center')
-    FlipkartLabel.grid(column=1, row=8)
-    FlipkartNameLabel.grid(column=1, row=9)
-    FlipcartPriceLabel.grid(column=1, row=10)
+    FlipkartNameLabel = Label(root, text=FlipkartName, wraplength=400, justify='center')
+    FlipcartPriceLabel = Label(root, text="Price : "+FlipkartPrice, justify='center')
+    FlipkartLabel.grid(column=2, row=4)
+    FlipkartNameLabel.grid(column=2, row=5)
+    FlipcartPriceLabel.grid(column=2, row=6)
     def OpenFlipkartLink():
         webbrowser.open(link_flipkart)
     FlipcartLinkButton = Button(root, text="View product", command=OpenFlipkartLink, bg='blue', fg='white')
-    FlipcartLinkButton.grid(column=1, row=11)
+    FlipcartLinkButton.grid(column=2, row=7)
+    def OpenMoreSuggestions_Flipkart():
+        webbrowser.open(url_flipkart)
+    FlipkartMoreSuggestionsButton = Button(root, text="Not this? Click here for more suggestions", command=OpenMoreSuggestions_Flipkart, bg='grey', fg='white')
+    FlipkartMoreSuggestionsButton.grid(column=2, row=8)
 
-    MyButton.grid_forget()
-    exitButton = Button(root, text="Exit", command=root.quit, padx=20, bg='#333', fg='white')
-    exitButton.grid(column=1, row=15)
+    CompareButton.grid_forget()
+    ExitButton = Button(root, text="Exit", command=root.quit, padx=20, bg='black', fg='white', justify='center')
+    ExitButton.grid(column=1, row=10, columnspan=2)
 
 
 # Search
-MyButton = Button(root, text="Compare",  command=Run, bg='#333', fg='white')
-MyButton.config(font=(15))
-MyButton.grid(column=1, row=3)
-
+CompareButton = Button(root, text="Compare",  command=Run, bg='black', fg='white')
+CompareButton.config(font=(15))
+CompareButton.grid(column=1, row=3, columnspan=2)
 
 root.mainloop()
