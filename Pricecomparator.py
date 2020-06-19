@@ -6,7 +6,7 @@ from PIL import ImageTk, Image
 
 root = Tk()
 
-root.title("Compare prices of any products")
+root.title("Compare prices of any product")
 
 Label1 = Label(root, text="Search for any product:")
 
